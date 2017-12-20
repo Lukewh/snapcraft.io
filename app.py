@@ -19,7 +19,9 @@ from dateutil import parser, relativedelta
 from math import floor
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+from requests.exceptions import RequestException
 from urllib.parse import urlparse, parse_qs
+from random import randint
 
 
 app = flask.Flask(__name__)
@@ -188,7 +190,10 @@ def get_pages_details(links):
 # ===
 @app.route('/')
 def homepage():
-    return flask.render_template('index.html')
+    return flask.render_template(
+        'index.html',
+        featured_snaps=get_featured_snaps()
+    )
 
 
 @app.route('/discover/')
@@ -243,7 +248,7 @@ def snap_details(snap_name):
     with appropriate sanitation.
     """
     today = datetime.datetime.utcnow().date()
-    month_ago = today - relativedelta.relativedelta(months=1)
+    week_ago = today - relativedelta.relativedelta(weeks=1)
 
     details_response = _get_from_cache(
         snap_details_url.format(snap_name=snap_name),
@@ -265,7 +270,7 @@ def snap_details(snap_name):
         {
             "metric_name": "installed_base_by_country_percent",
             "snap_id": details['snap_id'],
-            "start": month_ago.strftime('%Y-%m-%d'),
+            "start": week_ago.strftime('%Y-%m-%d'),
             "end": today.strftime('%Y-%m-%d')
         }
     ]
@@ -274,6 +279,7 @@ def snap_details(snap_name):
         headers=metrics_query_headers,
         json=metrics_query_json
     )
+
     geodata = metrics_response.json()[0]['series']
 
     # Normalise geodata from API
@@ -399,7 +405,7 @@ def _get_from_cache(url, headers, json=None):
                 )
                 if response.status_code >= 500:
                     new_response.raise_for_status()
-            except:
+            except RequestException:
                 request_error = True
             else:
                 response = new_response
@@ -409,3 +415,146 @@ def _get_from_cache(url, headers, json=None):
     response.old_data_from_error = request_error
 
     return response
+
+
+# Publisher views
+# ===
+@app.route('/snaps/<snap_name>/measure')
+def publisher_snap(snap_name):
+    """
+    A view to display the snap measure page for specific snaps.
+
+    This queries the snapcraft API (api.snapcraft.io) and passes
+    some of the data through to the publisher/measure.html template,
+    with appropriate sanitation.
+    """
+    metric_period = flask.request.args.get('period', default='30d', type=str)
+    metric_period_int = int(metric_period[:-1])
+
+    details_response = _get_from_cache(
+        snap_details_url.format(snap_name=snap_name),
+        headers=details_query_headers
+    )
+    details = details_response.json()
+
+    if details_response.status_code >= 400:
+        message = (
+            'Failed to get snap details for {snap_name}'.format(**locals())
+        )
+
+        if details_response.status_code == 404:
+            message = 'Snap not found: {snap_name}'.format(**locals())
+
+        flask.abort(details_response.status_code, message)
+
+    # Dummy data
+    installs_metrics = {}
+    installs_metrics['buckets'] = []
+    installs_metrics['metric_name'] = 'installs'
+    installs_metrics['series'] = []
+    installs_metrics['snap_id'] = details['snap_id']
+    installs_metrics['status'] = 'OK'
+
+    active_devices = {}
+    active_devices['buckets'] = []
+    active_devices['metric_name'] = 'active_devices'
+    active_devices['series'] = []
+    active_devices['snap_id'] = details['snap_id']
+    active_devices['status'] = 'OK'
+
+    start_date = datetime.date.today() + datetime.timedelta(
+        days=-metric_period_int)
+
+    for index in range(0, metric_period_int):
+        new_date = start_date + datetime.timedelta(days=index)
+        new_date = new_date.strftime('%Y-%m-%d')
+        installs_metrics['buckets'].append(new_date)
+        active_devices['buckets'].append(new_date)
+
+    installs_values = []
+
+    for index in range(0, metric_period_int):
+        installs_values.append(randint(0, 100))
+
+    installs_metrics['series'].append({
+        'name': 'installs',
+        'values': installs_values
+    })
+
+    version_1_0_values = []
+    version_1_1_values = []
+    version_1_2_values = []
+
+    for date_index in range(0, metric_period_int):
+        rand = randint(0, 20)
+
+        if len(version_1_0_values) > 0:
+            version_1_0_value = version_1_0_values[-1] + rand
+        else:
+            version_1_0_value = 0
+
+        if date_index > 10:
+            if len(version_1_1_values) > 0:
+                version_1_1_value = version_1_1_values[-1] + rand
+            else:
+                version_1_1_value = 0
+            version_1_0_value = version_1_0_values[-1] - (rand - 5)
+        else:
+            version_1_1_value = 0
+
+        if date_index > 20:
+            if len(version_1_2_values) > 0:
+                version_1_2_value = version_1_2_values[-1] + rand
+            else:
+                version_1_2_value = 0
+
+            version_1_1_value = version_1_1_values[-1] - (rand - 5)
+        else:
+            version_1_2_value = 0
+
+        version_1_0_value = 0 if version_1_0_value < 0 else version_1_0_value
+        version_1_1_value = 0 if version_1_1_value < 0 else version_1_1_value
+        version_1_2_value = 0 if version_1_2_value < 0 else version_1_2_value
+        version_1_0_values.append(version_1_0_value)
+        version_1_1_values.append(version_1_1_value)
+        version_1_2_values.append(version_1_2_value)
+
+    active_devices['series'] = [
+        {
+            'name': '1.0',
+            'values': version_1_0_values
+        },
+        {
+            'name': '1.1',
+            'values': version_1_1_values
+        },
+        {
+            'name': '1.2',
+            'values': version_1_2_values
+        }
+    ]
+    active_devices_total = 0
+    for version in active_devices['series']:
+        active_devices_total += version['values'][-1]
+    # end of dummy data
+
+    context = {
+        # Data direct from details API
+        'snap_title': details['title'],
+        'package_name': details['package_name'],
+        'metric_period': metric_period_int,
+
+        # Metrics data
+        'installs_total': sum(installs_values),
+        'installs_metrics': installs_metrics,
+        'active_devices_total': active_devices_total,
+        'active_devices': active_devices,
+
+        # Context info
+        'is_linux': 'Linux' in flask.request.headers['User-Agent']
+    }
+
+    return flask.render_template(
+        'publisher/measure.html',
+        **context
+    )
