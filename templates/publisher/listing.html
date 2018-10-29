@@ -359,6 +359,7 @@
 <script>
   Raven.context(function () {
     snapcraft.publisher.initMultiselect('.js-license', {{ licenses|tojson }}, ' OR ');
+    snapcraft.publisher.initIcon('#snap_icon', '.p-editable-icon', {{ icon_url|tojson }});
     snapcraft.publisher.market.initForm({
       snapIconImage: "snap_icon_image",
       snapIconInput: "snap_icon",

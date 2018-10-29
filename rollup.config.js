@@ -43,6 +43,7 @@ export default [
           "node_modules/polylabel/**",
           "node_modules/tinyqueue/**",
           "node_modules/create-react-class/**",
+          "node_modules/react-image-crop/**",
           "node_modules/fbjs/**",
           "node_modules/object-assign/**",
           "node_modules/react/**",

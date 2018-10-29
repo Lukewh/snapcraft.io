@@ -187,3 +187,5 @@ $color-navigation-background: #252525;
 
 @import 'patterns_first-snap-flow';
 @include snapcraft-p-first-snap-flow;
+
+@import 'react-image-crop/lib/ReactCrop.scss';
