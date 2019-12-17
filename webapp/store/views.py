@@ -52,6 +52,7 @@ def store_blueprint(store_query=None, testing=False):
 
     snap_details_views(store, api, _handle_errors)
 
+    # snap specific legacy route
     @store.route("/discover")
     def discover():
         return flask.redirect(flask.url_for(".homepage"))
@@ -75,6 +76,7 @@ def store_blueprint(store_query=None, testing=False):
             status_code, error_info = _handle_errors(api_error)
             return flask.abort(status_code)
 
+        # snap specific variable
         featured_snaps = logic.get_searched_snaps(featured_snaps_results)
 
         if not featured_snaps:
@@ -90,6 +92,7 @@ def store_blueprint(store_query=None, testing=False):
                 featured_snaps[index]
             )
 
+        # snap specific feature
         livestream = snapcraft_logic.get_livestreams()
 
         return (
@@ -97,13 +100,16 @@ def store_blueprint(store_query=None, testing=False):
                 "store/store.html",
                 categories=categories,
                 has_featured=True,
+                # snap specific context
                 featured_snaps=featured_snaps,
                 error_info=error_info,
+                # snap specific context
                 livestream=livestream,
             ),
             status_code,
         )
 
+    # snap specific feature
     def brand_store_view():
         error_info = {}
         status_code = 200
@@ -123,9 +129,12 @@ def store_blueprint(store_query=None, testing=False):
             status_code,
         )
 
+    # snap specific definition
     def search_snap():
         status_code = 200
+        # snap specific variable
         snap_searched = flask.request.args.get("q", default="", type=str)
+        # snap specific variable
         snap_category = flask.request.args.get(
             "category", default="", type=str
         )
@@ -172,6 +181,7 @@ def store_blueprint(store_query=None, testing=False):
         else:
             total_results_count = None
 
+        # snap specific variable
         snaps_results = logic.get_searched_snaps(searched_results)
 
         links = {}
@@ -201,8 +211,10 @@ def store_blueprint(store_query=None, testing=False):
                     page=total_pages,
                 )
 
+        # snap specific variable
         featured_snaps = []
 
+        # snap specific variable
         # These are the hand-selected "featured snaps" in each category.
         # We don't have this information on the API, so it's hardcoded.
         number_of_featured_snaps = 19
@@ -228,7 +240,9 @@ def store_blueprint(store_query=None, testing=False):
             "query": snap_searched,
             "category": snap_category,
             "category_display": snap_category_display,
+            # snap specific context
             "searched_snaps": snaps_results,
+            # snap specific context
             "featured_snaps": featured_snaps,
             "total": total_results_count,
             "links": links,
@@ -241,6 +255,7 @@ def store_blueprint(store_query=None, testing=False):
             status_code,
         )
 
+    # snap specific feature
     def brand_search_snap():
         status_code = 200
         snap_searched = flask.request.args.get("q", default="", type=str)
@@ -289,6 +304,7 @@ def store_blueprint(store_query=None, testing=False):
             status_code,
         )
 
+    # snap specific feature
     @store.route("/publisher/<regex('[a-z0-9-]*[a-z][a-z0-9-]*'):publisher>")
     def publisher_details(publisher):
         """
@@ -354,6 +370,7 @@ def store_blueprint(store_query=None, testing=False):
         except ApiError as api_error:
             status_code, error_info = _handle_errors(api_error)
 
+        # snap specific variable
         snaps_results = logic.get_searched_snaps(category_results)
 
         # if the first snap (banner snap) doesn't have an icon, remove the last
@@ -369,6 +386,7 @@ def store_blueprint(store_query=None, testing=False):
         context = {
             "category": category,
             "has_featured": True,
+            # snap specific context
             "snaps": snaps_results,
             "error_info": error_info,
         }
@@ -378,6 +396,7 @@ def store_blueprint(store_query=None, testing=False):
             status_code,
         )
 
+    # snap specific code branch
     if store_query:
         store.add_url_rule("/", "homepage", brand_store_view)
         store.add_url_rule("/search", "search", brand_search_snap)

@@ -1,11 +1,15 @@
 {% extends webapp_config['LAYOUT'] %}
 
+{# snap specific title #}
 {% block meta_title %}Install Linux apps using the Snap Store | Snapcraft {% endblock %}
 
+{# snap specific copy_doc #}
 {% block meta_copydoc %}https://docs.google.com/document/d/10j4xltRGXrqp1e3mJicSft3vHpzpnCdCRXMNpspvJ2c/edit{% endblock %}
 
+{# snap specific description #}
 {% block meta_description %}Find and install the best Linux software for all major Linux distributions.{% endblock %}
 
+{# snap specific schema #}
 {% block meta_schema %}
   <script type="application/ld+json">
     {
@@ -45,7 +49,8 @@
   {% for category in categories %}
   <section class="p-strip is-shallow">
     <div class="u-fixed-width u-clearfix">
-        <h2 class="u-float-left">{{ category.name }}</h2>
+      <h2 class="u-float-left">{{ category.name }}</h2>
+      {# snap specific classnames #}
         <a href="/search?category={{ category.slug }}" class="p-button--neutral u-float-right u-hide--small p-featured-snap__see-more">See more...</a>
     </div>
     <div data-category="{{ category.slug }}" class="js-store-category">
@@ -58,6 +63,8 @@
   </section>
   {% endfor %}
 
+  {# snap specific classnames #}
+  {# snap specific callouts #}
   <section class="p-strip--image is-deep is-dark p-strip--snap-store">
     <div class="row u-vertically-center">
       <div class="col-7 u-fade-left--medium">

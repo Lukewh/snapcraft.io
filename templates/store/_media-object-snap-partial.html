@@ -1,8 +1,10 @@
+{# snap specific classnames #}
 <a
   class="p-media-object p-media-object--snap{% if media_object_classname %} {{ media_object_classname }}{% endif %}"
   href="/{{ snap.package_name }}"
   title="{{ snap.title }}{% if snap.summary %} – {{ snap.summary }}{% endif %}"
   >
+  {# snap specific default icon #}
   {% set icon_url = "https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" %}
   {% set size = 48 %}
   {% if snap.icon_url %}
@@ -31,6 +33,7 @@
       {% if not hide_publisher %}
         <p>
           <span class="u-off-screen">Publisher: </span>{{ snap.origin }}
+          {# snap specific developer validation #}
           {% if snap.developer_validation and snap.developer_validation == VERIFIED_PUBLISHER %}
           <span class="p-verified" title="Verified account">
             <img src="https://assets.ubuntu.com/v1/75654c90-rosette.svg" />

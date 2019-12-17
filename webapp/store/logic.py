@@ -7,6 +7,7 @@ import humanize
 from dateutil import parser
 
 
+# snap specific definition
 def get_n_random_snaps(snaps, choice_number):
 
     if len(snaps) > choice_number:
@@ -15,6 +16,7 @@ def get_n_random_snaps(snaps, choice_number):
     return snaps
 
 
+# snap specific definition
 def get_searched_snaps(search_results):
     """Get search snaps from API response
 
@@ -29,6 +31,7 @@ def get_searched_snaps(search_results):
     )
 
 
+# snap specific definition
 def get_snap_banner_url(snap_result):
     """Get snaps banner url from media object
 
@@ -122,6 +125,7 @@ def convert_navigation_url(url, link):
     return url
 
 
+# snap specific argument names
 def build_pagination_link(snap_searched, snap_category, page):
     """Build pagination link
 
@@ -145,6 +149,7 @@ def build_pagination_link(snap_searched, snap_category, page):
     return "/search?" + "&".join(params)
 
 
+# snap specific naming - channel, architecture, track etc.
 def convert_channel_maps(channel_map):
     """Converts channel maps list to format easier to manipulate
 
@@ -212,6 +217,7 @@ def convert_date(date_to_convert):
         return date_parsed.strftime("%-d %B %Y")
 
 
+# snap specific list
 categories_list = [
     "development",
     "games",
@@ -227,6 +233,7 @@ categories_list = [
     "art-and-design",
 ]
 
+# snap specific list
 blacklist = ["featured"]
 
 
@@ -258,6 +265,7 @@ def get_categories(categories_json):
     return categories
 
 
+# snap specific definition
 def get_snap_categories(snap_categories):
     """Retrieve list of categories with names for a snap.
 
@@ -278,6 +286,7 @@ def get_snap_categories(snap_categories):
     return categories
 
 
+# snap specific naming
 def get_last_updated_version(channel_maps):
     """Get the oldest channel that was created
 
@@ -299,6 +308,7 @@ def get_last_updated_version(channel_maps):
     return newest_channel
 
 
+# snap specific naming?
 def has_stable(channel_maps_list):
     """Use the channel map to find out if the snap has a stable release
 
@@ -316,6 +326,7 @@ def has_stable(channel_maps_list):
     return False
 
 
+# snap specific naming?
 def get_lowest_available_risk(channel_map, track):
     """Get the lowest available risk for the default track
 
@@ -341,6 +352,7 @@ def get_lowest_available_risk(channel_map, track):
     return lowest_available_risk
 
 
+# snap specific feature
 def get_confinement(channel_map, track, risk):
     """Get the confinement for a channel
 
@@ -360,6 +372,7 @@ def get_confinement(channel_map, track, risk):
     return None
 
 
+# snap specific naming?
 def get_version(channel_map, track, risk):
     """Get the version for a channel
 
@@ -432,6 +445,7 @@ def get_videos(media):
     ]
 
 
+# snap specific definition
 def promote_snap_with_icon(snaps):
     """Move the first snap with an icon to the front of the list
 

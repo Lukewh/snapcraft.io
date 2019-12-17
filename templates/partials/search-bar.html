@@ -5,10 +5,12 @@
   p-strip--image p-strip-slanted--snapcraft
 {% endif %}">
   <div class="u-fixed-width">
+    {# snap specific partial #}
     {% if not IS_BRAND_STORE %}
       {% include 'partials/livestream-notification.html' %}
       <h1 class="p-heading--two">Search thousands of snaps used by millions of people across 41 Linux distributions</h1>
     {% endif %}
+    {# snap specific config #}
     {% if webapp_config['STORE_SEARCH_INTRO'] %}
       {{ webapp_config['STORE_SEARCH_INTRO']|safe }}
     {% endif %}
@@ -16,6 +18,7 @@
       <div class="p-form__group">
         <label for="search-input" class="u-off-screen">Search</label>
         <div class="p-form__control u-clearfix">
+          {# snap specific placeholder #}
           <input class="u-no-margin--bottom" id="search-input" type="search" name="q" placeholder="{% if not IS_BRAND_STORE %}Search thousands of snaps{% else %}Search available snaps{% endif %}" value="{{ query }}" />
         </div>
       </div>

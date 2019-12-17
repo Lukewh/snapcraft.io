@@ -1,3 +1,4 @@
+{# snap specific id and context #}
 <div id="js-snap-{{ category }}">
   <div class="u-fixed-width">
     {% if snaps %}
@@ -7,6 +8,7 @@
     {% endif %}
     {% if snap and has_featured %}
       {% if snap and snap.banner_url %}
+        {# snap specific classname #}
         <a class="p-featured-snap--banner" href="/{{ snap.package_name }}">
           {{
             image(
