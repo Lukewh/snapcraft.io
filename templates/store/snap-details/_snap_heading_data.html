@@ -7,10 +7,12 @@
       height=60,
       hi_def=True,
       loading="eager",
+      {# snap specific class #}
       attrs={"class": "p-snap-heading__icon", "data-live": "icon"}
     ) | safe
   }}
 {% else %}
+  {# snap specific default icon #}
   <img class="p-snap-heading__icon" src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="" data-live="icon" />
 {% endif %}
 <div class="p-snap-heading__title">

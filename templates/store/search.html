@@ -9,9 +9,11 @@
   {% elif category_display %}
     {{ category_display }}
   {% else %}
+    {# snap specific messaging #}
     Search Snap Store
   {% endif %}
-  — Linux software in the Snap Store
+   {# snap specific messaging #}
+    — Linux software in the Snap Store
 {% endblock %}
 
 {% block content %}
@@ -34,11 +36,14 @@
       <div class="u-fixed-width">
         {% if not query and category_display %}
           <a href="/store">&lsaquo; Categories</a>
+          {# snap specific messaging #}
           <h2>{{ category_display }} snaps</h2>
         {% else %}
           {% if total %}
+            {# snap specific messaging #}
             <h2>We’ve found {{ total }} snaps</h2>
           {% else %}
+            {# snap specific messaging #}
             <h2>We’ve found some snaps</h2>
           {% endif %}
         {% endif %}
@@ -47,12 +52,14 @@
         {% if not query and category_display and featured_snaps %}
           {% set has_featured = True %}
           {% set show_summary = True %}
+          {# snap specific variable #}
           {% set snaps = featured_snaps %}
           {% include "store/_category-partial.html" %}
           </div>
           {% if searched_snaps %}
             <div class="p-strip is-shallow u-no-padding--bottom">
               <div class="u-fixed-width">
+                {# snap specific messaging #}
                 <h3>All {{ category_display|lower }} snaps</h3>
               </div>
               <div class="row">

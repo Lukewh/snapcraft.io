@@ -1,3 +1,4 @@
+# snap specific file name
 import bleach
 import flask
 import humanize
@@ -18,11 +19,13 @@ from webapp.api.exceptions import (
 from webapp.markdown import parse_markdown_description
 
 
+# snap specific definition
 def snap_details_views(store, api, handle_errors):
-
+    # snap specific variables - potentially specific regex?
     snap_regex = "[a-z0-9-]*[a-z][a-z0-9-]*"
     snap_regex_upercase = "[A-Za-z0-9-]*[A-Za-z][A-Za-z0-9-]*"
 
+    # snap specific definition
     def _get_context_snap_details(snap_name):
         try:
             details = api.get_snap_details(snap_name)
@@ -32,6 +35,7 @@ def snap_details_views(store, api, handle_errors):
             flask.abort(502, str(api_response_decode_error))
         except ApiResponseErrorList as api_response_error_list:
             if api_response_error_list.status_code == 404:
+                # snap specific error
                 flask.abort(404, "No snap named {}".format(snap_name))
             else:
                 if api_response_error_list.errors:
@@ -87,6 +91,7 @@ def snap_details_views(store, api, handle_errors):
             typ="safe",
         )
 
+        # snap specific feature
         publisher_snaps = helpers.get_yaml(
             "{}{}-snaps.yaml".format(
                 flask.current_app.config["CONTENT_DIRECTORY"][
@@ -97,8 +102,10 @@ def snap_details_views(store, api, handle_errors):
             typ="safe",
         )
 
+        # snap specific feature
         publisher_featured_snaps = None
 
+        # snap specific feature
         if publisher_info:
             publisher_featured_snaps = publisher_info.get("featured_snaps")
             publisher_snaps = logic.get_n_random_snaps(
@@ -107,8 +114,10 @@ def snap_details_views(store, api, handle_errors):
 
         videos = logic.get_videos(details["snap"]["media"])
 
+        # snap specific override
         # until default tracks are supported by the API we special case node
         # to use 10, rather then latest
+        # snap specific feature?
         default_track = helpers.get_default_track(details["name"])
         if not default_track:
             default_track = (
@@ -129,6 +138,7 @@ def snap_details_views(store, api, handle_errors):
             channel_maps_list, default_track, lowest_risk_available
         )
 
+        # snap specific variable
         is_users_snap = False
         if authentication.is_authenticated(flask.session):
             if (
@@ -144,8 +154,10 @@ def snap_details_views(store, api, handle_errors):
         categories = logic.get_snap_categories(details["snap"]["categories"])
 
         context = {
+            # snap specific context
             "snap-id": details.get("snap-id"),
             # Data direct from details API
+            # snap specific context
             "snap_title": details["snap"]["title"],
             "package_name": details["name"],
             "categories": categories,
@@ -156,7 +168,9 @@ def snap_details_views(store, api, handle_errors):
             "username": details["snap"]["publisher"]["username"],
             "screenshots": screenshots,
             "videos": videos,
+            # snap specific context
             "publisher_snaps": publisher_snaps,
+            # snap specific context
             "publisher_featured_snaps": publisher_featured_snaps,
             "has_publisher_page": publisher_info is not None,
             "prices": details["snap"]["prices"],
@@ -175,12 +189,14 @@ def snap_details_views(store, api, handle_errors):
             "filesize": humanize.naturalsize(binary_filesize),
             "last_updated": logic.convert_date(last_updated),
             "last_updated_raw": last_updated,
+            # snap specific context
             "is_users_snap": is_users_snap,
         }
 
         return context
 
     @store.route('/<regex("' + snap_regex + '"):snap_name>')
+    # snap specific definition
     def snap_details(snap_name):
         """
         A view to display the snap details page for specific snaps.
@@ -197,6 +213,7 @@ def snap_details_views(store, api, handle_errors):
 
         webapp_config = flask.current_app.config.get("WEBAPP_CONFIG")
 
+        # snap specific feature
         if "STORE_QUERY" not in webapp_config:
             country_metric_name = "weekly_installed_base_by_country_percent"
             os_metric_name = (
@@ -277,6 +294,7 @@ def snap_details_views(store, api, handle_errors):
         )
 
     @store.route('/<regex("' + snap_regex + '"):snap_name>/embedded')
+    # snap specific definition
     def snap_details_embedded(snap_name):
         """
         A view to display the snap embedded card for specific snaps.
@@ -314,6 +332,7 @@ def snap_details_views(store, api, handle_errors):
         )
 
     @store.route('/<regex("' + snap_regex_upercase + '"):snap_name>')
+    # snap specific definition
     def snap_details_case_sensitive(snap_name):
         return flask.redirect(
             flask.url_for(".snap_details", snap_name=snap_name.lower())
@@ -341,6 +360,7 @@ def snap_details_views(store, api, handle_errors):
         return svg
 
     @store.route('/<regex("' + snap_regex + '"):snap_name>/badge.svg')
+    # snap specific definition
     def snap_details_badge(snap_name):
         context = _get_context_snap_details(snap_name)
 
@@ -358,6 +378,7 @@ def snap_details_views(store, api, handle_errors):
         return svg, 200, {"Content-Type": "image/svg+xml"}
 
     @store.route('/<regex("' + snap_regex + '"):snap_name>/trending.svg')
+    # snap specific definition
     def snap_details_badge_trending(snap_name):
         is_preview = flask.request.args.get("preview", default=0, type=int)
         context = _get_context_snap_details(snap_name)
@@ -392,6 +413,7 @@ def snap_details_views(store, api, handle_errors):
         return svg, 200, {"Content-Type": "image/svg+xml"}
 
     @store.route('/install/<regex("' + snap_regex + '"):snap_name>/<distro>')
+    # snap specific feature
     def snap_distro_install(snap_name, distro):
         filename = f"store/content/distros/{distro}.yaml"
         distro_data = helpers.get_yaml(filename)

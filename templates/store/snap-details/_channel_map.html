@@ -3,7 +3,9 @@
     <div class="p-strip--light is-shallow">
       <div class="u-fixed-width">
         <p class="p-heading--four">Install {{ default_track }}/{{ lowest_risk_available }} of {{ snap_title }}</p>
+        {# snap specific messaging #}
         <label>Ubuntu 16.04 or later?</label>
+        {# snap specific feature #}
         <button
           data-snap="{{ package_name }}
             {% if lowest_risk_available != 'stable' %}
@@ -13,11 +15,13 @@
           data-js="open-desktop">
             View in Desktop store
         </button>
+        {# snap specific messaging #}
         <p class="p-form-help-text">Make sure <a href="/docs/installing-snapd">snap support</a> is enabled in your Desktop store.</p>
       </div>
       <div class="u-fixed-width">
         <hr />
       </div>
+      {# snap specific messaging #}
       <div class="u-fixed-width">
         <p><b>Install using the command line</b></p>
         <div class="p-code-copyable p-cli-install">
@@ -48,6 +52,7 @@
           <form class="p-form--inline p-channel-map__form">
             <div class="p-form__group">
               <label class="p-form__label">
+                {# snap specific messaging #}
                 Options to install this snap
               </label>
             </div>
@@ -115,6 +120,7 @@
   </div>
   <div class="u-fixed-width">
     <p class="p-heading--four">Install ${channel} of {{ snap_title }}</p>
+    {# snap specific messaging #}
     <label>Ubuntu 16.04 or later?</label>
     <button data-snap="{{ package_name }}?channel=${channel}" class="p-view-store-button" data-js="open-desktop">View in Desktop store</button>
     <p class="p-form-help-text">Make sure <a href="/docs/installing-snapd">snap support</a> is enabled in your Desktop store.</p>

@@ -2,8 +2,10 @@
 
 {% block meta_copydoc %}{% endblock %}
 
+{# snap specific messaging #}
 {% block meta_title %}Install {{ snap_title }} for Linux using the Snap Store | Snapcraft{% endblock %}
 
+{# snap specific messaging #}
 {% block meta_description %}Get the latest version of {{ snap_title }} for Linux - {{ summary }}{% endblock %}
 
 {% if icon_url %}
@@ -12,6 +14,7 @@
   {% endblock %}
 {% endif %}
 
+{# snap specific schema #}
 {% block meta_schema %}
   <script type="application/ld+json">
     {
@@ -67,6 +70,7 @@
   {% endif %}
   <div class="p-strip--light is-shallow snapcraft-banner-background">
     {% if is_users_snap and not is_preview %}
+      {# snap specific classname #}
       <div class="row js-snap-owner-notification">
         <div class="p-notification--information">
           <p class="p-notification__response">
@@ -77,9 +81,11 @@
     {% endif %}
     <div class="row">
 
+      {# snap specific classname #}
       <div class="p-snap-heading">
         {% include 'store/snap-details/_snap_heading_data.html' %}
 
+      {# snap specific feature #}
       {% if not IS_BRAND_STORE %}
         <div class="p-snap-install-buttons">
           <button
@@ -127,6 +133,7 @@
     </div>
   </div>
 
+  {# snap specific feature #}
   {% if not IS_BRAND_STORE %}
     {% include "store/snap-details/_channel_map.html" %}
   {% endif %}
@@ -203,6 +210,7 @@
     </div>
   {% endif %}
 
+  {# snap specific feature #}
   {% if not IS_BRAND_STORE %}
     {% if package_name == "hiri" %}
       {% include "partials/_hiri-case-study.html" %}
@@ -224,10 +232,12 @@
     {% endif %}
   {% endif %}
 
+  {# snap specific feature #}
   {% if not IS_BRAND_STORE %}
     {% include "store/snap-details/_distro-instructions-for-snap-support.html" %}
   {% endif %}
 
+  {# snap specific feature #}
   {# REPORT SNAP SECTION - hidden in preview #}
   {% if not is_preview and not IS_BRAND_STORE %}
     <div class="u-fixed-width">
@@ -241,6 +251,7 @@
     {% include "store/snap-details/_report_snap_modal.html" %}
   {% endif %}
 
+  {# snap specific feature #}
   {% if has_publisher_page %}
   <div class="p-strip is-shallow">
       <div class="u-fixed-width u-clearfix">
