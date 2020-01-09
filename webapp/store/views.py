@@ -16,10 +16,10 @@ from canonicalwebteam.store_api.exceptions import (
     StoreApiTimeoutError,
 )
 from webapp.snapcraft import logic as snapcraft_logic
-from webapp.store.snap_details_views import snap_details_views
+from webapp.store.snap_details_views import snap_details_views, charm_details_views
 
 
-def store_blueprint(store_query=None, testing=False):
+def store_blueprint(store_query=None, is_charmhub=False, testing=False):
     if testing:
         session = talisker.requests.get_session(requests.Session)
     else:
@@ -56,7 +56,10 @@ def store_blueprint(store_query=None, testing=False):
 
         return status_code, error
 
-    snap_details_views(store, api, _handle_errors)
+    if is_charmhub:
+        charm_details_views(store, api, _handle_errors)
+    else:
+        snap_details_views(store, api, _handle_errors)
 
     @store.route("/discover")
     def discover():

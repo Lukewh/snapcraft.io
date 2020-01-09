@@ -88,7 +88,7 @@ def init_snapcraft(app, testing=False):
 
 
 def init_charmhub(app, testing=False):
-    app.register_blueprint(store_blueprint(testing=testing))
+    app.register_blueprint(store_blueprint(testing=testing, is_charmhub=True))
     # These are included to prevent the app crashing without major changes
     init_docs(app, "/_docs")
     init_blog(app, "/_blog")

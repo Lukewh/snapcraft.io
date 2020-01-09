@@ -1,0 +1,22 @@
+@mixin snapcraft-series-tag {
+  .series-tag {
+    display: inline-block;
+    border-radius: 4px;
+    font-size: .875rem;
+    font-weight: 500;
+    padding: 0 .5rem;
+    margin-right: .25rem;
+    margin-bottom: .25rem;
+    text-transform: capitalize;
+    border: 1px solid $color-mid-dark;
+    color: $color-mid-dark;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

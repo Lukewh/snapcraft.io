@@ -60,6 +60,30 @@
     }
   }
 
+  .p-strip-slanted--charmhub-footer {
+    @extend %vf-strip;
+    background-image:
+    linear-gradient(to bottom left, #3fc8f2 0%, #3fc8f2 49.9%, rgba(119, 41, 83, 0) 50%, rgba(119, 41, 83, 0) 100%),
+    linear-gradient(to bottom left, #044f66 0%, #022935 100%);
+    background-size: 25% 15%, 100%;
+    background-position: top right;
+    background-repeat: no-repeat;
+    clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 0% calc(0% + 4rem));
+    color: $color-light;
+    margin-top: -4rem;
+    padding-bottom: 2.5rem;
+    padding-top: 6rem;
+
+    &__link {
+      color: $color-light;
+
+      &:hover,
+      &:visited {
+        color: $color-light;
+      }
+    }
+  }
+
   .p-strip-slanted--snapcraft {
     @extend %vf-strip;
     @extend %vf-strip-slanted;

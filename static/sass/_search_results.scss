@@ -1,0 +1,75 @@
+@mixin snapcraft-search-results {
+  .search-results {
+    $icon-size: 1.5rem;
+
+    &__entity-name {
+      line-height: 1.5rem;
+      font-size: 1rem;
+      text-transform: capitalize;
+    }
+
+    &-table {
+      tr {
+        display: flex;
+        padding-top: 1rem;
+      }
+
+      th,
+      td {
+        flex: 1;
+        flex-wrap: wrap;
+
+        &:first-child {
+          flex: .25;
+          min-width: 5rem;
+          padding-right: 0;
+        }
+      }
+
+      &__icons,
+      &__series {
+        padding-top: .75rem;
+      }
+    }
+
+    &__bundle-icon {
+      $padding: .12rem;
+      border-radius: (($padding * 2) + $icon-size) / 2;
+      border: .06rem solid $color-mid-light;
+      display: inline-block;
+      font-size: .875rem;
+      padding: $padding .3rem + $padding $padding $padding;
+      position: relative;
+      top: -.12rem;
+
+      @at-root a#{&} {
+        color: $color-mid-dark;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      .search-results__icon {
+        &:first-child {
+          // Set a background to handle overlapping transparent icons.
+          background-color: $color-x-light;
+          box-shadow: 0 0 0 .04rem $color-x-light;
+          position: relative;
+        }
+
+        &:nth-child(2) {
+          margin-left: -1.2rem;
+        }
+      }
+    }
+
+    &__icon {
+      border-radius: $icon-size / 2;
+      display: inline-block;
+      height: $icon-size;
+      width: $icon-size;
+      vertical-align: bottom;
+    }
+  }
+}

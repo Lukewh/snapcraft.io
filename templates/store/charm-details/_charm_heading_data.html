@@ -1,0 +1,52 @@
+<div class="p-media-object--large">
+  {% if icon_url %}
+  {{
+    image(
+      url=icon_url,
+      alt=entity_title,
+      width=60,
+      height=60,
+      hi_def=True,
+      loading="eager",
+      attrs={"class": "p-snap-heading__icon", "data-live": "icon"}
+    ) | safe
+  }}
+{% else %}
+  <img class="p-media-object__image" src="https://assets.ubuntu.com/v1/be6eb412-snapcraft-missing-icon.svg" alt="" />
+  {% endif %}
+  <div class="p-media-object__details">
+    <h3 class="p-media-object__title u-no-margin--bottom">
+      {{ entity_title }}
+    </h3>
+    <p class="p-media-object__content">
+      <div class="p-snap-heading__title">
+        <div class="u-hide u-show--small">
+          {% include 'store/_snap-header-information.html' %}
+        </div>
+        <ul class="p-inline-list--middot">
+          <li class="p-inline-list__item u-hide--small">
+            {% include 'store/_snap-header-information.html' %}
+          </li>
+          {% for category in categories %}<li class="p-inline-list__item">
+            <a href="/search?category={{category.slug}}">{{ category.name }}</a>
+          </li>{% endfor %}
+        </ul>
+      </div>
+    </p>
+  </div>
+</div>
+  
+<div class="p-snap-install-buttons">
+  <button
+    class="p-button--neutral p-snap-install-buttons__versions"
+    aria-describedby="{{ package_name }}-preview-channel-map" disabled
+    data-js="open-channel-map" data-controls="channel-map-versions"
+    aria-controls="channel-map-versions">
+    {{ default_track }}/{{ lowest_risk_available }} {{ version }}&nbsp;&nbsp;<i
+                                                                               class="p-icon--contextual-menu"></i>
+  </button>
+   <p style="display: inline;">
+            <code id="js-deploy-command"
+              style="background-color: transparent; box-shadow: none; margin-left: 1rem;">juju deploy {{ package_name }}</code>
+   </p>
+</div>

@@ -42,12 +42,15 @@ def set_handlers(app):
         is_snapcraft = True
         is_charmhub = False
 
+        entity_name = "snap"
+
         if (
             "STORE_NAME" in app.config["WEBAPP_CONFIG"]
             and app.config["WEBAPP_CONFIG"]["STORE_NAME"] == "Charmhub"
         ):
             is_charmhub = True
             is_snapcraft = False
+            entity_name = "charm"
 
         return {
             # Variables
@@ -65,6 +68,7 @@ def set_handlers(app):
             "IS_BRAND_STORE": is_brand_store,
             "IS_CHARMHUB": is_charmhub,
             "IS_SNAPCRAFT": is_snapcraft,
+            "ENTITY_NAME": entity_name,
             # Functions
             "contains": template_utils.contains,
             "join": template_utils.join,

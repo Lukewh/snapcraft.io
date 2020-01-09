@@ -224,3 +224,12 @@ $color-social-icon-foreground: $color-light;
 
 @import 'snapcraft_tour';
 @include snapcraft-tour;
+
+@import 'patterns_icons';
+@include snapcraft-p-icons;
+
+@import 'series_tag';
+@include snapcraft-series-tag;
+
+@import 'search_results';
+@include snapcraft-search-results;

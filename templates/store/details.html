@@ -2,9 +2,9 @@
 
 {% block meta_copydoc %}{% endblock %}
 
-{% block meta_title %}Install {{ snap_title }} for Linux using the Snap Store | Snapcraft{% endblock %}
+{% block meta_title %}Install {{ entity_title }} for Linux using the Snap Store | Snapcraft{% endblock %}
 
-{% block meta_description %}Get the latest version of {{ snap_title }} for Linux - {{ summary }}{% endblock %}
+{% block meta_description %}Get the latest version of {{ entity_title }} for Linux - {{ summary }}{% endblock %}
 
 {% if icon_url %}
   {% block meta_image %}
@@ -17,7 +17,7 @@
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "{{ snap_title }}",
+      "name": "{{ entity_title }}",
       "description": "{{ summary }}",
       "datePublished": "{{ last_updated_raw }}",
       {% if screenhots and screenshots|length > 0 %}
@@ -76,68 +76,56 @@
       </div>
     {% endif %}
     <div class="row">
-
-      <div class="p-snap-heading">
+      <div class="col-8">
+        {% if IS_CHARMHUB %}
+        {% include 'store/charm-details/_charm_heading_data.html' %}
+        {% elif IS_SNAPCRAFT %}
         {% include 'store/snap-details/_snap_heading_data.html' %}
-
-      {% if not IS_BRAND_STORE %}
-        <div class="p-snap-install-buttons">
-          <button
-            class="p-button--neutral p-snap-install-buttons__versions{% if is_preview %} p-tooltip p-tooltip--btm-right{% endif %}"
-            {% if is_preview %}
-              aria-describedby="{{ package_name }}-preview-channel-map"
-              disabled
-            {% endif %}
-            data-js="open-channel-map"
-            data-controls="channel-map-versions"
-            aria-controls="channel-map-versions">
-            {{ default_track }}/{{ lowest_risk_available }} {{ version }}&nbsp;&nbsp;<i class="p-icon--contextual-menu"></i>
-            {% if is_preview %}
-            <span class="p-tooltip__message u-align--center" role="tooltip" id="{{ package_name }}-preview-channel-map">This content is being displayed for preview purposes</span>
-            {% endif %}
-          </button>
-          {% if has_stable %}
-            <button
-              class="p-button--positive p-snap-install-buttons__install{% if is_preview %} p-tooltip p-tooltip--btm-right{% endif %}"
-              {% if is_preview %}
-                aria-describedby="{{ package_name }}-preview-channel-map"
-                disabled
-              {% endif %}
-              data-js="open-channel-map"
-              data-controls="channel-map-install"
-              aria-controls="channel-map-install">
-                Install
-                {% if is_preview %}
-                  <span class="p-tooltip__message u-align--center" role="tooltip" id="{{ package_name }}-preview-channel-map">This content is being displayed for preview purposes</span>
-                {% endif %}
-            </button>
-          {% endif %}
-        </div>
-      {% else %}
-        <div class="p-snap-install-buttons">
-          <div class="p-code-copyable">
-            <input class="p-code-copyable__input" id="snap-install-stable" value="sudo snap install {{ package_name }}" readonly="readonly">
-            <button class="p-code-copyable__action js-clipboard-copy" data-clipboard-target="#snap-install-stable">
-              Copy to clipboard
-            </button>
+        {% endif %}
+      </div>
+      {% if IS_CHARMHUB %}
+        <div class="col-4">
+          <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89"
+               height="20" style="margin-bottom: .5rem;">
+          <div class="series-tags">
+            <span class="series-tag">
+              16.04 LTS
+            </span>
+            <span class="series-tag">
+              18.04 LTS
+            </span>
+            <span class="series-tag">
+              18.10
+            </span>
+            <span class="series-tag">
+              19.04
+            </span>
+            <span class="series-tag">
+              14.04 LTS
+            </span>
           </div>
+          <p>Also supports: <a href="">Kubernets</a></p>
         </div>
       {% endif %}
-        </div>
     </div>
   </div>
 
-  {% if not IS_BRAND_STORE %}
+  {% if IS_SNAPCRAFT %}
+    {% if not IS_BRAND_STORE %}
     {% include "store/snap-details/_channel_map.html" %}
-  {% endif %}
+    {% endif %}
 
-  {% if screenshots or videos or is_preview %}
+    {% if screenshots or videos or is_preview %}
     <div class="p-strip--light is-shallow">
       {% include "store/snap-details/_screenshots.html" %}
     </div>
+    {% endif %}
   {% endif %}
 
   <div class="p-strip is-shallow">
+    {% if IS_CHARMHUB %}
+    {% include "store/charm-details/_tabs.html" %}
+    {% endif %}
     <div class="row">
       <div class="col-8">
         {% if summary or is_preview %}<h4 data-live="summary">{{ summary }}</h4>{% endif %}
@@ -150,13 +138,25 @@
         {% endif %}
       </div>
       <div class="col-4">
+        {% if IS_CHARMHUB %}
+        {% include "store/charm-details/_details.html" %}
+        {% elif IS_SNAPCRAFT %}
         {% include "store/snap-details/_details.html" %}
+        {% endif %}
 
         {# EMBEDDABLE CARD SECTION - hidden in preview #}
         {% if not is_preview and not IS_BRAND_STORE %}
-          <h4>Share this snap</h4>
+          <h4 class="p-muted-heading">Share this {{ ENTITY_NAME }}</h4>
           <p>Generate an embeddable card to be shared on external websites.</p>
-          <p><button class="p-button--neutral js-embedded-card-toggle">Create embeddable card</button></p>
+          <p>
+            <button class="p-button--neutral js-embedded-card-toggle">
+              {% if IS_CHARMHUB %}
+              Share this charm
+              {% else %}
+              Create embeddable card
+              {% endif %}
+            </button>
+          </p>
 
           {% include "store/snap-details/_embedded_card_modal.html" %}
         {% endif %}
@@ -164,7 +164,7 @@
     </div>
   </div>
 
-  {% if countries or normalized_os %}
+  {% if IS_SNAPCRAFT and (countries or normalized_os) %}
     <div data-live="public_metrics_live">
       <div class="u-fixed-width">
         <hr />
@@ -174,7 +174,7 @@
         <div class="row {% if normalized_os %}u-equal-height{% endif %}">
           {% if countries %}
             <div class="{% if normalized_os %}col-8{% else %}col-12{% endif %} js-snap-map-holder" data-live="installed_base_by_country_percent">
-              <h4>Where people are using {{ snap_title }}</h4>
+              <h4>Where people are using {{ entity_title }}</h4>
               <div id="js-snap-map" class="snapcraft-territories"></div>
             </div>
           {% endif %}
@@ -203,7 +203,7 @@
     </div>
   {% endif %}
 
-  {% if not IS_BRAND_STORE %}
+  {% if not IS_BRAND_STORE and IS_SNAPCRAFT %}
     {% if package_name == "hiri" %}
       {% include "partials/_hiri-case-study.html" %}
     {% else %}
@@ -224,21 +224,25 @@
     {% endif %}
   {% endif %}
 
-  {% if not IS_BRAND_STORE %}
+  {% if not IS_BRAND_STORE and IS_SNAPCRAFT %}
     {% include "store/snap-details/_distro-instructions-for-snap-support.html" %}
   {% endif %}
 
   {# REPORT SNAP SECTION - hidden in preview #}
-  {% if not is_preview and not IS_BRAND_STORE %}
+  {% if IS_SNAPCRAFT and not is_preview and not IS_BRAND_STORE %}
     <div class="u-fixed-width">
       <hr />
     </div>
 
     <div class="u-fixed-width">
-      <p>Is there a problem with {{snap_title}}? <a class="js-modal-open">Report this app</a></p>
+      <p>Is there a problem with {{entity_title}}? <a class="js-modal-open">Report this app</a></p>
     </div>
 
     {% include "store/snap-details/_report_snap_modal.html" %}
+  {% endif %}
+
+  {% if IS_CHARMHUB %}
+    {% include "store/charm-details/_top-bundles.html" %}
   {% endif %}
 
   {% if has_publisher_page %}
@@ -294,9 +298,11 @@
   {% include "store/snap-details/_templates.html" %}
 {% endblock %}
 
-{% block scripts_modules %}
-  <script src="{{ static_url('js/modules/clipboard.min.js') }}" defer></script>
-{% endblock %}
+{% if IS_SNAPCRAFT %}
+  {% block scripts_modules %}
+    <script src="{{ static_url('js/modules/clipboard.min.js') }}" defer></script>
+  {% endblock %}
+{% endif %}
 
 {% block scripts_includes %}
   <script src="{{ static_url('js/dist/public.js') }}" defer></script>
