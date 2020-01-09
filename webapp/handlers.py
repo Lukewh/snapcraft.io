@@ -39,6 +39,16 @@ def set_handlers(app):
         if "STORE_QUERY" in app.config["WEBAPP_CONFIG"]:
             is_brand_store = True
 
+        is_snapcraft = True
+        is_charmhub = False
+
+        if (
+            "STORE_NAME" in app.config["WEBAPP_CONFIG"]
+            and app.config["WEBAPP_CONFIG"]["STORE_NAME"] == "Charmhub"
+        ):
+            is_charmhub = True
+            is_snapcraft = False
+
         return {
             # Variables
             "LOGIN_URL": app.config["LOGIN_URL"],
@@ -53,6 +63,8 @@ def set_handlers(app):
             "webapp_config": app.config["WEBAPP_CONFIG"],
             "BSI_URL": app.config["BSI_URL"],
             "IS_BRAND_STORE": is_brand_store,
+            "IS_CHARMHUB": is_charmhub,
+            "IS_SNAPCRAFT": is_snapcraft,
             # Functions
             "contains": template_utils.contains,
             "join": template_utils.join,

@@ -72,12 +72,20 @@
     <!-- JS that is needed right away -->
     <script src="{{ static_url('js/dist/global-nav.js') }}"></script>
 
-    {% include "_header.html" %}
+    {% if IS_SNAPCRAFT %}
+    {% include "snapcraft/_header.html" %}
+    {% elif IS_CHARMHUB %}
+    {% include "charmhub/_header.html" %}
+    {% endif %}
     {% endblock %}
 
     {% block content %}{% endblock %}
 
-    {% include "_footer.html" %}
+    {% if IS_SNAPCRAFT %}
+    {% include "snapcraft/_footer.html" %}
+    {% elif IS_CHARMHUB %}
+    {% include "charmhub/_footer.html" %}
+    {% endif %}
 
     {% block scripts %}{% endblock %}
 

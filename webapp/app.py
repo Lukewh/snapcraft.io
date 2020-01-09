@@ -63,6 +63,8 @@ def create_app(testing=False):
 
     if app.config["WEBAPP"] == "snapcraft":
         init_snapcraft(app, testing)
+    elif app.config["WEBAPP"] == "charmhub":
+        init_charmhub(app, testing)
     else:
         init_brandstore(app)
 
@@ -83,6 +85,13 @@ def init_snapcraft(app, testing=False):
     app.register_blueprint(publisher_snaps)
     init_docs(app, "/docs")
     init_blog(app, "/blog")
+
+
+def init_charmhub(app, testing=False):
+    app.register_blueprint(store_blueprint(testing=testing))
+    # These are included to prevent the app crashing without major changes
+    init_docs(app, "/_docs")
+    init_blog(app, "/_blog")
 
 
 def init_extensions(app):
