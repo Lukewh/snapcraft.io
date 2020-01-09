@@ -76,13 +76,11 @@
       </div>
     {% endif %}
     <div class="row">
-      <div class="col-8">
-        {% if IS_CHARMHUB %}
-        {% include 'store/charm-details/_charm_heading_data.html' %}
-        {% elif IS_SNAPCRAFT %}
-        {% include 'store/snap-details/_snap_heading_data.html' %}
-        {% endif %}
-      </div>
+      {% if IS_CHARMHUB %}
+      {% include 'store/charm-details/_charm_heading_data.html' %}
+      {% elif IS_SNAPCRAFT %}
+      {% include 'store/snap-details/_snap_heading_data.html' %}
+      {% endif %}
       {% if IS_CHARMHUB %}
         <div class="col-4">
           <img src="https://assets.ubuntu.com/v1/adac6928-ubuntu.svg" alt="" width="89"
@@ -110,7 +108,9 @@
     </div>
   </div>
 
-  {% if IS_SNAPCRAFT %}
+  {% if IS_CHARMHUB %}
+    {% include "store/charm-details/_channel_map.html" %}
+  {% elif IS_SNAPCRAFT %}
     {% if not IS_BRAND_STORE %}
     {% include "store/snap-details/_channel_map.html" %}
     {% endif %}

@@ -353,13 +353,13 @@ def snap_details_views(store, api, handle_errors):
             metrics_query_json = [
                 metrics_helper.get_filter(
                     metric_name=country_metric_name,
-                    snap_id=context["snap-id"],
+                    snap_id=context["entity-id"],
                     start=end,
                     end=end,
                 ),
                 metrics_helper.get_filter(
                     metric_name=os_metric_name,
-                    snap_id=context["snap-id"],
+                    snap_id=context["entity-id"],
                     start=end,
                     end=end,
                 ),
@@ -415,7 +415,7 @@ def snap_details_views(store, api, handle_errors):
         )
 
         return (
-            flask.render_template("store/snap-details.html", **context),
+            flask.render_template("store/details.html", **context),
             status_code,
         )
 

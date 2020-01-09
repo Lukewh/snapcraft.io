@@ -96,6 +96,10 @@
     top: 0;
     z-index: 11;
 
+    &.is-charmhub {
+      max-width: 55rem;
+    }
+
     @media screen and (max-width: $breakpoint-medium) {
       border: {
         bottom: 1px solid $color-mid-light;

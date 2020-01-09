@@ -154,9 +154,14 @@ class ChannelMap {
           );
         },
 
-        '[data-js="slide-install-instructions"]': (event, target) => {
+        '[data-js="slide-install-instructions-snapcraft"]': (event, target) => {
           event.preventDefault();
           this.slideToInstructions(target);
+        },
+
+        '[data-js="slide-install-instructions-charmhub"]': (event, target) => {
+          event.preventDefault();
+          this.updateDeploymentCommand(target);
         }
       },
 
@@ -176,10 +181,11 @@ class ChannelMap {
     });
   }
 
-  positionChannelMap() {
+  positionChannelMap(alignment) {
     if (!this.openButton) {
       return;
     }
+
     const windowWidth = document.body.scrollWidth;
     const buttonRect = this.openButton.getBoundingClientRect();
     const channelMapPosition = [
@@ -187,7 +193,11 @@ class ChannelMap {
       buttonRect.y + buttonRect.height + 16 + window.scrollY
     ];
 
-    this.channelMapEl.style.right = `${channelMapPosition[0]}px`;
+    if (alignment === "right") {
+      this.channelMapEl.style.right = `${channelMapPosition[0]}px`;
+    } else if (alignment === "left") {
+      this.channelMapEl.style.left = `${buttonRect.left}px`;
+    }
     this.channelMapEl.style.top = `${channelMapPosition[1]}px`;
   }
 
@@ -199,7 +209,13 @@ class ChannelMap {
 
     this.openButton.classList.add("is-active");
 
-    this.positionChannelMap();
+    let align = "right";
+
+    if (openButton.dataset.align) {
+      align = openButton.dataset.align;
+    }
+
+    this.positionChannelMap(align);
 
     // open screen based on button click (or install screen by default)
     this.openScreenName =
@@ -302,6 +318,27 @@ class ChannelMap {
     const slides = clickEl.closest(".p-channel-map__slides");
     slides.classList.add("show-right");
     slides.classList.remove("show-left");
+  }
+
+  updateDeploymentCommand(clickEl) {
+    // Update deployment command
+    const deployCommandContainer = document.querySelector("#js-deploy-command");
+    if (deployCommandContainer) {
+      const oldCommand = deployCommandContainer.innerHTML;
+      const appName = oldCommand.split(" ")[2];
+      const clickedVersion = clickEl.dataset.channel.split("/")[1];
+      if (clickedVersion === "stable") {
+        deployCommandContainer.innerHTML = "juju deploy " + appName;
+      } else {
+        deployCommandContainer.innerHTML = `juju deploy ${appName} ${clickedVersion}`;
+      }
+    }
+
+    //Highlight the clicked row
+    Array.from(clickEl.closest("tbody").children).forEach(function(el) {
+      el.classList.remove("is-highlighted");
+    });
+    clickEl.classList.add("is-highlighted");
   }
 
   writeInstallInstructions(channel, confinement) {

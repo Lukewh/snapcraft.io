@@ -1,4 +1,4 @@
-<div id="js-channel-map" class="p-channel-map is-closed">
+<div id="js-channel-map" class="p-channel-map is-charmhub is-closed">
   <div id="channel-map-install" class="p-channel-map__tab">
     <div class="p-strip--light is-shallow">
       <div class="u-fixed-width">
@@ -44,7 +44,7 @@
   <div id="channel-map-versions" class="p-channel-map__tab">
     <div class="p-channel-map__slides show-left">
       <div class="p-strip is-shallow p-channel-map__slide u-no-padding--bottom" data-js="channel-map-options">
-        <div class="u-fixed-width">
+        <div class="u-fixed-width u-hide">
           <form class="p-form--inline p-channel-map__form">
             <div class="p-form__group">
               <label class="p-form__label">
@@ -95,16 +95,14 @@
               <tr>
                 <th>Channel</th>
                 <th>Version</th>
-                <th width="25%" class="u-hide--medium u-hide--small">Published</th>
-                <th width="12%"></th>
+                <th>Published</th>
+                <th width="30%">Default series</th>
               </tr>
             </thead>
             <tbody data-js="channel-map-table">
             </tbody>
           </table>
         </div>
-      </div>
-      <div class="p-strip--light is-shallow p-channel-map__slide" data-js="channel-map-install-details">
       </div>
     </div>
   </div>
@@ -143,11 +141,23 @@
   </div>
 </script>
 <script type="text/template" id="channel-map-row-template" data-js="channel-map-row">
-  <tr class="${rowClass}" data-js="slide-install-instructions-snapcraft" data-channel="${row[0]}/${row[1]}" data-confinement="${row[4]}">
+  <tr class="${rowClass}" data-js="slide-install-instructions-charmhub" data-channel="${row[0]}/${row[1]}" data-confinement="${row[4]}">
     <td>${row[0]}/${row[1]}</td>
     <td>${row[2]}</td>
     <td class="u-hide--medium u-hide--small">${row[3]}</td>
-    <td class="u-align--center"><a href="#" class="p-channel-map__version-table-install">Install &rsaquo;</a></td>
+    <td>
+      <div class="series-tags">
+        <span class="series-tag">
+          16.04 LTS
+        </span>
+        <span class="series-tag">
+          18.04 LTS
+        </span>
+        <span class="series-tag">
+          18.10
+        </span>
+      </div>
+    </td>
   </tr>
 </script>
 <div class="p-channel-map-overlay" data-js="close-channel-map" style="display: none"></div>
